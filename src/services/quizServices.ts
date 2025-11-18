@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { UserResult, Question } from '../types';
 
-const API_BASE_URL = (import.meta.env?.REACT_APP_API_URL as string) || 'http://localhost:5000/api';
+const API_BASE_URL = (import.meta.env?.VITE_API_URL as string) || 'https://quiz-app-backend-5mgt.onrender.com/api';
 
 export const saveResult = async (result: UserResult): Promise<void> => {
   try {
