@@ -14,7 +14,9 @@ app.use(express.json());
 // Supabase connection
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
 console.log('Supabase connected');
 
@@ -58,7 +60,7 @@ app.post('/api/results', async (req, res) => {
 
 app.get('/api/results', verifyAdmin, async (req, res) => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('user_results')
       .select('*')
       .order('timestamp', { ascending: false });
@@ -84,7 +86,7 @@ app.get('/api/results', verifyAdmin, async (req, res) => {
 
 app.delete('/api/results/:id', verifyAdmin, async (req, res) => {
   try {
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('user_results')
       .delete()
       .eq('id', parseInt(req.params.id));
@@ -97,7 +99,7 @@ app.delete('/api/results/:id', verifyAdmin, async (req, res) => {
 
 app.delete('/api/results', verifyAdmin, async (req, res) => {
   try {
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('user_results')
       .delete()
       .neq('id', 0); // Delete all records where id is not 0 (effectively deletes all)
@@ -143,7 +145,7 @@ app.put('/api/questions/:id', verifyAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { text, options, answer } = req.body;
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('questions')
       .update({ text, options, answer })
       .eq('id', id)
@@ -161,7 +163,7 @@ app.put('/api/questions/:id', verifyAdmin, async (req, res) => {
 app.post('/api/questions', verifyAdmin, async (req, res) => {
   try {
     const { id, text, options, answer, category } = req.body;
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('questions')
       .insert([{ id, text, options, answer, category }])
       .select();
@@ -175,7 +177,7 @@ app.post('/api/questions', verifyAdmin, async (req, res) => {
 app.delete('/api/questions/:id', verifyAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('questions')
       .delete()
       .eq('id', id);
