@@ -3,11 +3,13 @@ services:
     name: quiz-app-backend
     runtime: node
     buildCommand: cd server && npm install
-    startCommand: cd server && npm start
+    startCommand: cd server && node server.js
     envVars:
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
       - key: JWT_SECRET
         generateValue: true
@@ -20,4 +22,4 @@ services:
     publishDir: dist
     envVars:
       - key: VITE_API_URL
-        value: https://quiz-rh5e.onrender.com/api
+        value: https://quiz-app-backend-5mgt.onrender.com/api
