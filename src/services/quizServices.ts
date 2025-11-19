@@ -1,7 +1,9 @@
 import axios from 'axios';
 import type { UserResult, Question } from '../types';
 
-const API_BASE_URL = import.meta.env?.VITE_API_URL as string;
+let API_BASE_URL = import.meta.env?.VITE_API_URL as string;
+
+API_BASE_URL = API_BASE_URL + "/api"
 
 export const saveResult = async (result: UserResult): Promise<void> => {
   try {
@@ -52,7 +54,7 @@ export const deleteAllResults = async (): Promise<void> => {
 // Category-related API functions
 export const getCategories = async (): Promise<string[]> => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/categories`);
+    const response = await axios.get(`${API_BASE_URL}/categories`);
     console.log("🚀 ~ getCategories ~ API_BASE_URL:", API_BASE_URL);
     return response.data;
   } catch (error) {
