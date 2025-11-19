@@ -11,14 +11,13 @@ const AdminLogin: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const apiUrl = (import.meta.env?.REACT_APP_API_URL as string) || 'http://localhost:5000/api';
-      const response = await axios.post(`${apiUrl}/admin/login`, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/admin/login`, {
         username,
         password
       });
       localStorage.setItem('adminToken', response.data.token);
       navigate('/admin-welcome');
-    } catch (err) {
+    } catch {
       setError('Invalid username or password');
     }
   };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { getCategories } from '../services/quizServices';
 
 interface Category {
   id: string;
@@ -15,9 +16,7 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/categories');
-        if (!response.ok) throw new Error('Failed to fetch categories');
-        const data = await response.json();
+        const data = await getCategories();
         const categoryTitles: { [key: string]: string } = {
           frontend: 'Frontend',
           fullstack: 'Fullstack',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '../components/Navbar';
 import type { Question } from '../types';
 
@@ -9,19 +9,9 @@ const EditQuestionsPage: React.FC = () => {
     const [saving, setSaving] = useState(false);
     const [categories, setCategories] = useState<string[]>([]);
 
-    useEffect(() => {
-        fetchCategories();
-    }, []);
-
-    useEffect(() => {
-        if (selectedCategory) {
-            fetchQuestions(selectedCategory);
-        }
-    }, [selectedCategory]);
-
-    const fetchCategories = async () => {
+    const fetchCategories = useCallback(async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/categories');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/categories`);
             if (!response.ok) throw new Error('Failed to fetch categories');
             const data = await response.json();
             setCategories(data);
@@ -31,12 +21,12 @@ const EditQuestionsPage: React.FC = () => {
         } catch (error) {
             console.error('Failed to load categories:', error);
         }
-    };
+    }, [selectedCategory]);
 
-    const fetchQuestions = async (category: string) => {
+    const fetchQuestions = useCallback(async (category: string) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:5000/api/questions/${category}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/questions/${category}`);
             if (!response.ok) throw new Error('Failed to fetch questions');
             const data = await response.json();
             setQuestions(data);
@@ -46,7 +36,17 @@ const EditQuestionsPage: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchCategories();
+    }, [fetchCategories]);
+
+    useEffect(() => {
+        if (selectedCategory) {
+            fetchQuestions(selectedCategory);
+        }
+    }, [selectedCategory, fetchQuestions]);
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCategory(e.target.value);
@@ -75,7 +75,7 @@ const EditQuestionsPage: React.FC = () => {
         try {
             // Save all questions for the current category
             for (const question of questions) {
-                const response = await fetch(`http://localhost:5000/api/questions/${question.id}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/questions/${question.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ const EditQuestionsPage: React.FC = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:5000/api/questions', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/questions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ const EditQuestionsPage: React.FC = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/api/questions/${questionId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/questions/${questionId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

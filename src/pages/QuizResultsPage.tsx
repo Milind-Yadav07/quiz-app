@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import type { UserResult } from '../types';
 
@@ -15,19 +15,13 @@ const QuizResultsPage: React.FC = () => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (result) {
-            fetchQuestions();
-        }
-    }, [result]);
-
-    const fetchQuestions = async () => {
+    const fetchQuestions = useCallback(async () => {
         if (!result) return;
 
         try {
             // Extract category from quizTitle (assuming format like "Java Basics" -> "java")
             const category = result.quizTitle.toLowerCase().split(' ')[0];
-            const response = await fetch(`http://localhost:5000/api/questions/${category}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/questions/${category}`);
             if (!response.ok) throw new Error('Failed to fetch questions');
             const data = await response.json();
             setQuestions(data);
@@ -37,7 +31,13 @@ const QuizResultsPage: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [result]);
+
+    useEffect(() => {
+        if (result) {
+            fetchQuestions();
+        }
+    }, [result, fetchQuestions]);
 
     if (!result) {
         return (
