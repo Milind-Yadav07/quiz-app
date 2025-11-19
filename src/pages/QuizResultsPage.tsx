@@ -21,7 +21,7 @@ const QuizResultsPage: React.FC = () => {
         try {
             // Extract category from quizTitle (assuming format like "Java Basics" -> "java")
             const category = result.quizTitle.toLowerCase().split(' ')[0];
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/questions/${category}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/questions/${category}`);
             if (!response.ok) throw new Error('Failed to fetch questions');
             const data = await response.json();
             setQuestions(data);
