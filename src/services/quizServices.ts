@@ -52,7 +52,7 @@ export const deleteAllResults = async (): Promise<void> => {
 // Category-related API functions
 export const getCategories = async (): Promise<string[]> => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/categories`);
+    const response = await axios.get(`${API_BASE_URL}/api/categories`);
     console.log("🚀 ~ getCategories ~ API_BASE_URL:", API_BASE_URL);
     return response.data;
   } catch (error) {
