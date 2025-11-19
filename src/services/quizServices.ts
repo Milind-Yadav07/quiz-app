@@ -53,6 +53,7 @@ export const deleteAllResults = async (): Promise<void> => {
 export const getCategories = async (): Promise<string[]> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/categories`);
+    console.log("🚀 ~ getCategories ~ API_BASE_URL:", API_BASE_URL);
     return response.data;
   } catch (error) {
     console.error("Failed to fetch categories", error);
