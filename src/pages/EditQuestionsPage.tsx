@@ -11,7 +11,7 @@ const EditQuestionsPage: React.FC = () => {
 
     const fetchCategories = useCallback(async () => {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/categories`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/categories`);
             if (!response.ok) throw new Error('Failed to fetch categories');
             const data = await response.json();
             setCategories(data);
@@ -26,7 +26,7 @@ const EditQuestionsPage: React.FC = () => {
     const fetchQuestions = useCallback(async (category: string) => {
         setLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/questions/${category}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/questions/${category}`);
             if (!response.ok) throw new Error('Failed to fetch questions');
             const data = await response.json();
             setQuestions(data);
@@ -75,7 +75,7 @@ const EditQuestionsPage: React.FC = () => {
         try {
             // Save all questions for the current category
             for (const question of questions) {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/questions/${question.id}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/questions/${question.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ const EditQuestionsPage: React.FC = () => {
         };
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/questions`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/questions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ const EditQuestionsPage: React.FC = () => {
         }
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/questions/${questionId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/questions/${questionId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
